@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
 {
     [Header("cloneFrom & container")]
     [SerializeField] private GameObject _laserPrefab;
+    [SerializeField] private GameObject _tripleShotsPrefab;
     [SerializeField] private GameObject _clonedContainer;
     [SerializeField] private spawnManager spawn;
     private GameObject _clonedLaser;
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour
     [Header("FireRate Control")]
     private float _lastShot = 0.0f;
     private float _fireRate = 0.20f;
+    [SerializeField] private bool _isTripleShotingActive = false;
 
     [Header("Damage Taken")]
     private int numberOfLives = 3;
@@ -49,10 +51,19 @@ public class Player : MonoBehaviour
     private void fireRate()
     {
         _lastShot = Time.time + _fireRate;
-        float laserOffset = 1f;
+        float laserOffset = 1.07f;
         Vector3 clonedPosition = new Vector3(transform.position.x, transform.position.y + laserOffset, 0);
-        _clonedLaser = Instantiate(_laserPrefab, clonedPosition, Quaternion.identity);
-        _clonedLaser.transform.SetParent(_clonedContainer.transform);
+        if (_isTripleShotingActive)
+        {
+            _clonedLaser = Instantiate(_tripleShotsPrefab, clonedPosition, Quaternion.identity);
+            _clonedLaser.transform.SetParent(_clonedContainer.transform);
+        }
+        else
+        {
+            _clonedLaser = Instantiate(_laserPrefab, clonedPosition, Quaternion.identity);
+            _clonedLaser.transform.SetParent(_clonedContainer.transform);
+        }
+
     }
 
     private void playerMovement()
@@ -97,6 +108,31 @@ public class Player : MonoBehaviour
             // stop spawning enemies on player death
             spawn.isPlayerDead();
         }
+    }
+
+    public void power_upPicked()
+    {
+        _isTripleShotingActive = true;
+        StartCoroutine(powerup_countDown());
+    }
+    private IEnumerator powerup_countDown()
+    {
+        float delayTime = 5f;
+        while (_isTripleShotingActive)
+        {
+            yield return new WaitForSeconds(delayTime);
+            _isTripleShotingActive = false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // if (other.tag == "triple_shot_powerup")
+        // {
+        //     Debug.Log("you hit power up");
+        //     _isTripleShotingActive = true;
+        //     Destroy(other.gameObject);
+        // }
     }
 
 }

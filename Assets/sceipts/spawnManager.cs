@@ -7,6 +7,7 @@ public class spawnManager : MonoBehaviour
     // Start is called before the first frame update
     [Header("clonedEnemy & container")]
     [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private GameObject _powerUpPrefab;
     [SerializeField] private GameObject _enemyContainer;
     private GameObject _clonedEnemy;
 
@@ -20,6 +21,7 @@ public class spawnManager : MonoBehaviour
     void Start()
     {
         StartCoroutine(spawnEnemy());
+        StartCoroutine(power_up());
     }
 
     // Update is called once per frame
@@ -45,6 +47,19 @@ public class spawnManager : MonoBehaviour
             destroyEnemyClones();
         }
     }
+    private IEnumerator power_up()
+    {
+        while (_isAlive == false)
+        {
+            float randomPosition = Random.Range(_minX, _maxX);
+            Vector3 clonePosition = new Vector3(randomPosition, _maxY, 0);
+            Instantiate(_powerUpPrefab, clonePosition, Quaternion.identity);
+            float randomPowerUpSpawn = Random.Range(5f, 15f);
+            yield return new WaitForSeconds(randomPowerUpSpawn);
+        }
+
+    }
+
     private void destroyEnemyClones()
     {
         var clones = GameObject.FindGameObjectsWithTag("Enemy");

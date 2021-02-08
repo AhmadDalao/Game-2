@@ -16,6 +16,10 @@ public class Laser : MonoBehaviour
         // clean up the laser shot
         if (transform.position.y > maxY)
         {
+            if (transform.parent.gameObject != null && transform.parent.gameObject.tag != "laserContainer")
+            {
+                Destroy(transform.parent.gameObject);
+            }
             Destroy(this.gameObject);
         }
     }
