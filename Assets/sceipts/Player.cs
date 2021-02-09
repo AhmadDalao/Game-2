@@ -15,12 +15,14 @@ public class Player : MonoBehaviour
     [Header("player Movement")]
     private float _horizontal;
     private float _vertical;
-    private float _moveSpeed = 8f;
+    [SerializeField] private float _speedBooster = 1.8f;
+    [SerializeField] private float _moveSpeed = 8f;
 
     [Header("FireRate Control")]
     private float _lastShot = 0.0f;
-    private float _fireRate = 0.20f;
+    [SerializeField] private float _fireRate = 0.20f;
     [SerializeField] private bool _isTripleShotingActive = false;
+    [SerializeField] private bool _isSpeedUpActice = false;
 
     [Header("Damage Taken")]
     private int numberOfLives = 3;
@@ -110,12 +112,31 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void power_upPicked()
+    public void speedUpPickedUp()
+    {
+        _isSpeedUpActice = true;
+        if (_isSpeedUpActice)
+        {
+            _moveSpeed *= _speedBooster;
+        }
+        StartCoroutine(speedUp_Cooldown());
+    }
+    private IEnumerator speedUp_Cooldown()
+    {
+        float delayTime = 3f;
+        while (_isSpeedUpActice)
+        {
+            yield return new WaitForSeconds(delayTime);
+            _isSpeedUpActice = false;
+            _moveSpeed = 8f;
+        }
+    }
+    public void triple_shotPickedUp()
     {
         _isTripleShotingActive = true;
-        StartCoroutine(powerup_countDown());
+        StartCoroutine(triple_shotCooldown());
     }
-    private IEnumerator powerup_countDown()
+    private IEnumerator triple_shotCooldown()
     {
         float delayTime = 5f;
         while (_isTripleShotingActive)

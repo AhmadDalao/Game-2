@@ -14,8 +14,8 @@ public class Enemy : MonoBehaviour
         float minY = -8f;
         if (transform.position.y < minY)
         {
-            float minX = -10;
-            float maxX = 10;
+            float minX = -8;
+            float maxX = 8;
             float random = Random.Range(minX, maxX);
             transform.position = new Vector3(random, transform.position.y * -1f, 0);
         }

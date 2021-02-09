@@ -7,21 +7,21 @@ public class spawnManager : MonoBehaviour
     // Start is called before the first frame update
     [Header("clonedEnemy & container")]
     [SerializeField] private GameObject _enemyPrefab;
-    [SerializeField] private GameObject _powerUpPrefab;
+    [SerializeField] private GameObject[] power_ups;
     [SerializeField] private GameObject _enemyContainer;
     private GameObject _clonedEnemy;
 
     [Header("properties")]
     private float _delayTime = 5f;
-    private float _minX = -10;
-    private float _maxX = 10;
     private float _maxY = 8f;
-    private bool _isAlive = false;
+    private bool _isPlayerDead = false;
+    private float _minX = -8f;
+    private float _maxX = 8f;
 
     void Start()
     {
-        StartCoroutine(spawnEnemy());
-        StartCoroutine(power_up());
+        StartCoroutine(spawnEnemyCoroutine());
+        StartCoroutine(powerUpCoroutine());
     }
 
     // Update is called once per frame
@@ -30,9 +30,9 @@ public class spawnManager : MonoBehaviour
 
     }
 
-    private IEnumerator spawnEnemy()
+    private IEnumerator spawnEnemyCoroutine()
     {
-        while (_isAlive == false)
+        while (_isPlayerDead == false)
         {
             float randomPosition = Random.Range(_minX, _maxX);
             Vector3 clonePosition = new Vector3(randomPosition, _maxY, 0);
@@ -40,24 +40,24 @@ public class spawnManager : MonoBehaviour
             _clonedEnemy.transform.SetParent(_enemyContainer.transform);
             yield return new WaitForSeconds(_delayTime);
         }
-        if (_isAlive)
+        if (_isPlayerDead)
         {
             // we no longer need these objects of enemies so we destroy them.
-            yield return new WaitForSeconds(0.5f);
             destroyEnemyClones();
+            yield return new WaitForSeconds(0.5f);
         }
     }
-    private IEnumerator power_up()
+    private IEnumerator powerUpCoroutine()
     {
-        while (_isAlive == false)
+        while (_isPlayerDead == false)
         {
             float randomPosition = Random.Range(_minX, _maxX);
             Vector3 clonePosition = new Vector3(randomPosition, _maxY, 0);
-            Instantiate(_powerUpPrefab, clonePosition, Quaternion.identity);
+            int randomPowerUp = Random.Range(0, 2);
+            Instantiate(power_ups[randomPowerUp], clonePosition, Quaternion.identity);
             float randomPowerUpSpawn = Random.Range(5f, 15f);
             yield return new WaitForSeconds(randomPowerUpSpawn);
         }
-
     }
 
     private void destroyEnemyClones()
@@ -70,6 +70,6 @@ public class spawnManager : MonoBehaviour
     }
     public void isPlayerDead()
     {
-        _isAlive = true;
+        _isPlayerDead = true;
     }
 }

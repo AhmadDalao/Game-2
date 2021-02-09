@@ -168,7 +168,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 6297876243206987795, guid: 1121b6a00f35777438d78ee665a6c238, type: 3}
-  _powerUpPrefab: {fileID: 725962662708605805, guid: 057ed8b3ea504a148a69485ae1f1cc48, type: 3}
+  power_ups:
+  - {fileID: 725962662708605805, guid: 057ed8b3ea504a148a69485ae1f1cc48, type: 3}
+  - {fileID: 1402963725934300219, guid: 8829430a719653b47a26b38dab6ab19d, type: 3}
   _enemyContainer: {fileID: 1398179417}
 --- !u!1 &705507993
 GameObject:
@@ -559,5 +561,9 @@ PrefabInstance:
       propertyPath: _tripleShotsPrefab
       value: 
       objectReference: {fileID: 4676040261857465757, guid: 00702b65b92f7f240b04f84e17cce98c, type: 3}
+    - target: {fileID: 3277560640528475883, guid: cbcc04fddfc8b1f439a1bf6e0bdb023b, type: 3}
+      propertyPath: _isTripleShotingActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cbcc04fddfc8b1f439a1bf6e0bdb023b, type: 3}
