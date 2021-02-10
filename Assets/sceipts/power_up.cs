@@ -7,7 +7,7 @@ public class power_up : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] private float _moveSpeed = 3f;
     [SerializeField] private int power_upID;
-    Player player;
+    private Player player;
     void Start()
     {
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
@@ -34,21 +34,21 @@ public class power_up : MonoBehaviour
                 {
                     case 0:
                         Debug.Log("You picked: triple shot");
-                        player.triple_shotPickedUp();
-                        Destroy(this.gameObject); // destroy power up 
+                        player.tripleShotPowerUp();
                         break;
                     case 1:
                         Debug.Log("You picked: speed up");
-                        player.speedUpPickedUp();
-                        Destroy(this.gameObject); // destroy power up
+                        player.speedBoostPowerUp();
                         break;
                     case 2:
                         Debug.Log("You picked:  shield");
+                        player.shieldPowerUp();
                         break;
                     default:
                         Debug.Log("there is an error");
                         break;
                 }
+                Destroy(this.gameObject); // destroy power up 
             } // player is not null 
         }
     }

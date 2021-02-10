@@ -11,6 +11,8 @@ TagManager:
   - triple_shot_powerup
   - laserContainer
   - speedUp
+  - shield_poweup
+  - player_shield
   layers:
   - Default
   - TransparentFX

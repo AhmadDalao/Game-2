@@ -22,15 +22,18 @@ public class Player : MonoBehaviour
     private float _lastShot = 0.0f;
     [SerializeField] private float _fireRate = 0.20f;
     [SerializeField] private bool _isTripleShotingActive = false;
-    [SerializeField] private bool _isSpeedUpActice = false;
+    [SerializeField] private bool _isSpeedBoostActice = false;
+    [SerializeField] private bool _isShieldActice = false;
 
     [Header("Damage Taken")]
     private int numberOfLives = 3;
+    [SerializeField] private GameObject shieldUI;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector3(0, -3f, 0);
+        transform.position = new Vector3(0, -2.5f, 0);
         spawn = GameObject.FindWithTag("spawnManager").GetComponent<spawnManager>();
         if (spawn == null)
         {
@@ -65,7 +68,6 @@ public class Player : MonoBehaviour
             _clonedLaser = Instantiate(_laserPrefab, clonedPosition, Quaternion.identity);
             _clonedLaser.transform.SetParent(_clonedContainer.transform);
         }
-
     }
 
     private void playerMovement()
@@ -78,7 +80,7 @@ public class Player : MonoBehaviour
         transform.Translate(directions * _moveSpeed * Time.deltaTime);
         // restrictions on the edges
         float maxY = 5.5f;
-        float minY = -3.7f;
+        float minY = -2.7f;
         if (transform.position.y >= maxY)
         {
             transform.position = new Vector3(transform.position.x, maxY, 0);
@@ -101,6 +103,13 @@ public class Player : MonoBehaviour
 
     public void damagePlayer()
     {
+        if (_isShieldActice)
+        {
+            _isShieldActice = false;
+            shieldUI.SetActive(false);
+            Debug.Log("shield destroyed");
+            return;
+        }
         numberOfLives--;
         Debug.Log("lives left " + numberOfLives);
         // if player lives are 0 destroy player
@@ -112,48 +121,41 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void speedUpPickedUp()
-    {
-        _isSpeedUpActice = true;
-        if (_isSpeedUpActice)
-        {
-            _moveSpeed *= _speedBooster;
-        }
-        StartCoroutine(speedUp_Cooldown());
-    }
-    private IEnumerator speedUp_Cooldown()
-    {
-        float delayTime = 3f;
-        while (_isSpeedUpActice)
-        {
-            yield return new WaitForSeconds(delayTime);
-            _isSpeedUpActice = false;
-            _moveSpeed = 8f;
-        }
-    }
-    public void triple_shotPickedUp()
+    public void tripleShotPowerUp()
     {
         _isTripleShotingActive = true;
-        StartCoroutine(triple_shotCooldown());
+        StartCoroutine(tripleShotCooldown(5f));
     }
-    private IEnumerator triple_shotCooldown()
+
+    private IEnumerator tripleShotCooldown(float delay)
     {
-        float delayTime = 5f;
         while (_isTripleShotingActive)
         {
-            yield return new WaitForSeconds(delayTime);
+            yield return new WaitForSeconds(delay);
             _isTripleShotingActive = false;
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public void speedBoostPowerUp()
     {
-        // if (other.tag == "triple_shot_powerup")
-        // {
-        //     Debug.Log("you hit power up");
-        //     _isTripleShotingActive = true;
-        //     Destroy(other.gameObject);
-        // }
+        _isSpeedBoostActice = true;
+        _moveSpeed *= _speedBooster;
+        StartCoroutine(speedBoostPowerUpCooldown(3f));
     }
 
+    private IEnumerator speedBoostPowerUpCooldown(float delay)
+    {
+        while (_isSpeedBoostActice)
+        {
+            yield return new WaitForSeconds(delay);
+            _moveSpeed = 8f;
+            _isSpeedBoostActice = false;
+        }
+    }
+
+    public void shieldPowerUp()
+    {
+        _isShieldActice = true;
+        shieldUI.SetActive(true);
+    }
 }
