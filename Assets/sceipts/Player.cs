@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _tripleShotsPrefab;
     [SerializeField] private GameObject _clonedContainer;
     [SerializeField] private spawnManager spawn;
+    [SerializeField] private GameObject shieldUI;
+
     private GameObject _clonedLaser;
 
     [Header("player Movement")]
@@ -27,7 +29,9 @@ public class Player : MonoBehaviour
 
     [Header("Damage Taken")]
     private int numberOfLives = 3;
-    [SerializeField] private GameObject shieldUI;
+    [Header("Score")]
+    private int _score = 0;
+
 
 
     // Start is called before the first frame update
@@ -51,6 +55,7 @@ public class Player : MonoBehaviour
         {
             fireRate();
         }
+
     }
 
     private void fireRate()
@@ -158,4 +163,15 @@ public class Player : MonoBehaviour
         _isShieldActice = true;
         shieldUI.SetActive(true);
     }
+
+    public void addScore()
+    {
+        _score += 10;
+    }
+    public int currentScore()
+    {
+        return _score;
+    }
+
+
 }
