@@ -31,8 +31,7 @@ public class Player : MonoBehaviour
     private int numberOfLives = 3;
     [Header("Score")]
     private int _score = 0;
-
-
+    private UI_Manager _UI_manager;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +41,11 @@ public class Player : MonoBehaviour
         if (spawn == null)
         {
             Debug.LogError("Spawn is not here");
+        }
+        _UI_manager = GameObject.FindWithTag("ui_manager").GetComponent<UI_Manager>();
+        if (_UI_manager == null)
+        {
+            Debug.LogError("_UI_manager is not here");
         }
     }
 
@@ -116,6 +120,7 @@ public class Player : MonoBehaviour
             return;
         }
         numberOfLives--;
+        _UI_manager.updateLiveSprite(numberOfLives);
         Debug.Log("lives left " + numberOfLives);
         // if player lives are 0 destroy player
         if (numberOfLives < 1)
@@ -123,6 +128,8 @@ public class Player : MonoBehaviour
             Destroy(this.gameObject);
             // stop spawning enemies on player death
             spawn.isPlayerDead();
+            // show Game over UI
+            _UI_manager.GameOverScreen(_score);
         }
     }
 
@@ -164,14 +171,10 @@ public class Player : MonoBehaviour
         shieldUI.SetActive(true);
     }
 
-    public void addScore()
+    public void addScore(int points)
     {
-        _score += 10;
+        _score += points;
+        _UI_manager.updateScore(_score);
     }
-    public int currentScore()
-    {
-        return _score;
-    }
-
 
 }

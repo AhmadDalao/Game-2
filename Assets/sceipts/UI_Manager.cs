@@ -7,24 +7,48 @@ using UnityEngine.UI;
 public class UI_Manager : MonoBehaviour
 {
     // Start is called before the first frame update
-    private Player _player;
     [SerializeField] private Text _scoreTextField;
-    private int _scoreHolder;
+    [SerializeField] private GameObject _gameOverUI;
+    [SerializeField] private Text _gameOverScoreText;
+    [SerializeField] private GameObject _gameOverFlicker;
+    [SerializeField] private Image _livesSpriteImage;
+    [SerializeField] private Sprite[] _livesSprite;
+    // [SerializeField] private bool _isGameOver = true;
+
 
     void Start()
     {
-        _player = GameObject.FindWithTag("Player").GetComponent<Player>();
+        _scoreTextField.text = "Score: " + 0;
+        _gameOverUI.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void updateScore(int playerScore)
     {
-        updateScore();
+        _scoreTextField.text = "Score: " + playerScore;
     }
 
-    private void updateScore()
+    public void updateLiveSprite(int livesRemaining)
     {
-        _scoreHolder = _player.currentScore();
-        _scoreTextField.text = _scoreHolder.ToString("0");
+        _livesSpriteImage.sprite = _livesSprite[livesRemaining];
     }
+
+    public void GameOverScreen(int lastScorePlayer)
+    {
+        _gameOverUI.SetActive(true);
+        _gameOverScoreText.text = "Your Score: " + lastScorePlayer.ToString("0");
+        StartCoroutine(flickerGameOverCooldown());
+
+    }
+    private IEnumerator flickerGameOverCooldown()
+    {
+        while (true)
+        {
+            Debug.Log("while is game over true is working");
+            _gameOverFlicker.SetActive(true);
+            yield return new WaitForSeconds(1f);
+            _gameOverFlicker.SetActive(false);
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
 }
