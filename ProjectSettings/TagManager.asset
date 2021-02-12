@@ -6,13 +6,11 @@ TagManager:
   tags:
   - Laser
   - Enemy
-  - spawnManager
-  - Triple_shot
-  - triple_shot_powerup
   - laserContainer
-  - speedUp
-  - shield_poweup
-  - player_shield
+  - triple_shot_container
+  - LaserContainer
+  - UI_manager
+  - spawn_manager
   layers:
   - Default
   - TransparentFX
