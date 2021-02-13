@@ -12,6 +12,8 @@ TagManager:
   - UI_manager
   - spawn_manager
   - asteroid
+  - right_player_damage
+  - left_player_damage
   layers:
   - Default
   - TransparentFX

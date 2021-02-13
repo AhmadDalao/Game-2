@@ -8,8 +8,12 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _tripleShotLaserPrefab;
     [SerializeField] private GameObject _laserContainer;
     [SerializeField] private GameObject _shieldUI;
-
+    [SerializeField] private GameObject _right_player_damage;
+    [SerializeField] private GameObject _left_player_damage;
+    [SerializeField] private GameObject _explosion;
     private GameObject _clonedLaser;
+    private GameObject _clonedExplosion;
+    private Vector3 _explosionPosition;
     private float _moveSpeed = 8f;
     private float _horizontalMove;
     private float _verticalMove;
@@ -67,6 +71,7 @@ public class Player : MonoBehaviour
         {
             if (_numberOfLives < 3 && _numberOfLives > 0)
             {
+                removeDamageToPlayer(_numberOfLives);
                 _numberOfLives++;
                 _UI_manager.updateLivesOnDamage(_numberOfLives);
                 Debug.Log("new live added you have " + _numberOfLives);
@@ -86,18 +91,55 @@ public class Player : MonoBehaviour
         _score = 0;
         _UI_manager.updateScoreText(_score);
         _numberOfLives--;
-
+        addDamageToPlayer(_numberOfLives);
         Debug.Log("lives remaning " + _numberOfLives);
         _UI_manager.updateLivesOnDamage(_numberOfLives);
 
         if (_numberOfLives < 1)
         {
-            Destroy(this.gameObject);
+            _explosionPosition = new Vector3(transform.position.x, transform.position.y, 0);
+            _clonedExplosion = Instantiate(_explosion, _explosionPosition, Quaternion.identity);
+            Destroy(this.gameObject, 0.175f);
             _spawn.isPlayerDead();
             _UI_manager.gameOverScreen();
+            Destroy(_clonedExplosion, 1.5f);
+        }
+    }
+    private void addDamageToPlayer(int numberOfLives)
+    {
+        switch (numberOfLives)
+        {
+            case 0:
+                break;
+            case 1:
+                _right_player_damage.SetActive(true);
+                break;
+            case 2:
+                _left_player_damage.SetActive(true);
+                break;
+            default:
+                Debug.Log("You are full health");
+                break;
         }
     }
 
+    private void removeDamageToPlayer(int numberOfLives)
+    {
+        switch (numberOfLives)
+        {
+            case 0:
+                break;
+            case 1:
+                _right_player_damage.SetActive(false);
+                break;
+            case 2:
+                _left_player_damage.SetActive(false);
+                break;
+            default:
+                Debug.Log("You are full health");
+                break;
+        }
+    }
     private void shotingLaser()
     {
         if (_isTripleShotActice)

@@ -65,10 +65,10 @@ public class spawnManager : MonoBehaviour
         _isAsteroidDestroyed = true;
         if (_isAsteroidDestroyed)
         {
-            Invoke("startSpawning", 1f);
+            Invoke("startSpawningOnAsteroidDestryoed", 1.5f);
         }
     }
-    private void startSpawning()
+    private void startSpawningOnAsteroidDestryoed()
     {
         StartCoroutine(spawnEnemyCoroutine());
         StartCoroutine(spawnPowerUpCoroutine());
