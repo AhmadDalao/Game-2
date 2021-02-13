@@ -3,26 +3,26 @@ using UnityEngine.SceneManagement;
 
 public class gameManager : MonoBehaviour
 {
-    private bool hasGameEnded = false;
-    private float delayInvoke = 0f;
+    private bool _hasGameEnded = false;
+    private float _delayInvoke = 0f;
 
     public void gameOver()
     {
-        if (hasGameEnded == false)
+        if (_hasGameEnded == false)
         {
-            hasGameEnded = true;
-            Invoke("reStartGame", delayInvoke);
+            _hasGameEnded = true;
+            Invoke("reStartGame", _delayInvoke);
         }
-    }
-
-    private void reStartGame()
-    {
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
     }
 
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    private void reStartGame()
+    {
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
     }
 
 }

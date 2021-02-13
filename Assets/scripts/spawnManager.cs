@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class spawnManager : MonoBehaviour
 {
-    // Start is called before the first frame update
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private GameObject _enemyContainer;
     [SerializeField] private GameObject[] _power_ups;
@@ -13,9 +12,24 @@ public class spawnManager : MonoBehaviour
     private Vector3 _clonedEnemyPosition;
     private bool _isAsteroidDestroyed = false;
 
+    public void isPlayerDead()
+    {
+        _isPlayerDead = true;
+    }
+
+    public void isAsteroidDestroyed()
+    {
+        _isAsteroidDestroyed = true;
+        if (_isAsteroidDestroyed)
+        {
+            startSpawningOnAsteroidDestryoed();
+        }
+    }
+
     private IEnumerator spawnEnemyCoroutine()
     {
         float delay = 3.5f;
+        yield return new WaitForSeconds(1.5f);
         while (_isPlayerDead == false)
         {
             float randomPosition = Random.Range(-9f, 9f);
@@ -34,6 +48,7 @@ public class spawnManager : MonoBehaviour
 
     private IEnumerator spawnPowerUpCoroutine()
     {
+        yield return new WaitForSeconds(1.5f);
         while (_isPlayerDead == false)
         {
             float max_y = 8f;
@@ -55,19 +70,6 @@ public class spawnManager : MonoBehaviour
         }
     }
 
-    public void isPlayerDead()
-    {
-        _isPlayerDead = true;
-    }
-
-    public void isAsteroidDestroyed()
-    {
-        _isAsteroidDestroyed = true;
-        if (_isAsteroidDestroyed)
-        {
-            Invoke("startSpawningOnAsteroidDestryoed", 1.5f);
-        }
-    }
     private void startSpawningOnAsteroidDestryoed()
     {
         StartCoroutine(spawnEnemyCoroutine());

@@ -38,32 +38,42 @@ public class Enemy : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            if (_player != null)
-            {
-                if (_animator != null)
-                {
-                    _animator.SetTrigger("onEnemyDeath");
-                }
-                Destroy(this.gameObject, 0.25f);
-                _moveSpeed = 1f;
-                _player.playerTakeDamage();
-            }
+            didHitPlayer();
         }
         if (other.tag == "Laser")
         {
-            int randomScore = Random.Range(5, 11);
+            didHitLaser(other);
+        }
+    }
+
+    private void didHitPlayer()
+    {
+        if (_player != null)
+        {
             if (_animator != null)
             {
                 _animator.SetTrigger("onEnemyDeath");
             }
             Destroy(this.gameObject, 0.25f);
             _moveSpeed = 1f;
-            if (_player != null)
-            {
-                _player.updatePlayerScore(randomScore);
-            }
-            Destroy(other.gameObject);
+            _player.playerTakeDamage();
         }
+    }
+
+    private void didHitLaser(Collider2D other)
+    {
+        int randomScore = Random.Range(5, 11);
+        if (_animator != null)
+        {
+            _animator.SetTrigger("onEnemyDeath");
+        }
+        Destroy(this.gameObject, 0.25f);
+        _moveSpeed = 1f;
+        if (_player != null)
+        {
+            _player.updatePlayerScore(randomScore);
+        }
+        Destroy(other.gameObject);
     }
 
 }

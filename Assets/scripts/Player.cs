@@ -57,27 +57,11 @@ public class Player : MonoBehaviour
         }
     }
 
-
     public void updatePlayerScore(int points)
     {
         _score += points;
         addNewLive();
         _UI_manager.updateScoreText(_score);
-    }
-
-    private void addNewLive()
-    {
-        if (_score >= _newLiveLimit && _numberOfLives != 3)
-        {
-            if (_numberOfLives < 3 && _numberOfLives > 0)
-            {
-                removeDamageToPlayer(_numberOfLives);
-                _numberOfLives++;
-                _UI_manager.updateLivesOnDamage(_numberOfLives);
-                Debug.Log("new live added you have " + _numberOfLives);
-                _score = 0;
-            }
-        }
     }
 
     public void playerTakeDamage()
@@ -105,6 +89,41 @@ public class Player : MonoBehaviour
             Destroy(_clonedExplosion, 1.5f);
         }
     }
+
+    public void tripleShotPowerUp(float cooldownDelay)
+    {
+        _isTripleShotActice = true;
+        StartCoroutine(tripleShotCooldown(cooldownDelay));
+    }
+
+    public void moveSpeedPowerUp(float cooldownDelay)
+    {
+        _isSpeedUpActice = true;
+        _moveSpeed *= 1.5f;
+        StartCoroutine(moveSpeedCooldown(cooldownDelay));
+    }
+
+    public void shieldPowerUp()
+    {
+        _isShieldActice = true;
+        _shieldUI.SetActive(true);
+    }
+
+    private void addNewLive()
+    {
+        if (_score >= _newLiveLimit && _numberOfLives != 3)
+        {
+            if (_numberOfLives < 3 && _numberOfLives > 0)
+            {
+                removeDamageToPlayer(_numberOfLives);
+                _numberOfLives++;
+                _UI_manager.updateLivesOnDamage(_numberOfLives);
+                Debug.Log("new live added you have " + _numberOfLives);
+                _score = 0;
+            }
+        }
+    }
+
     private void addDamageToPlayer(int numberOfLives)
     {
         switch (numberOfLives)
@@ -140,6 +159,7 @@ public class Player : MonoBehaviour
                 break;
         }
     }
+
     private void shotingLaser()
     {
         if (_isTripleShotActice)
@@ -156,25 +176,6 @@ public class Player : MonoBehaviour
             _clonedLaser = Instantiate(_laserPrefab, _clonedLaserPosition, Quaternion.identity);
             _clonedLaser.transform.SetParent(_laserContainer.transform);
         }
-    }
-
-    public void tripleShotPowerUp(float cooldownDelay)
-    {
-        _isTripleShotActice = true;
-        StartCoroutine(tripleShotCooldown(cooldownDelay));
-    }
-
-    public void moveSpeedPowerUp(float cooldownDelay)
-    {
-        _isSpeedUpActice = true;
-        _moveSpeed *= 1.5f;
-        StartCoroutine(moveSpeedCooldown(cooldownDelay));
-    }
-
-    public void shieldPowerUp()
-    {
-        _isShieldActice = true;
-        _shieldUI.SetActive(true);
     }
 
     private IEnumerator moveSpeedCooldown(float delay)
