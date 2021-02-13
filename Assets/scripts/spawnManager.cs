@@ -11,12 +11,7 @@ public class spawnManager : MonoBehaviour
     private GameObject _clonedEnemy;
     private bool _isPlayerDead = false;
     private Vector3 _clonedEnemyPosition;
-
-    void Start()
-    {
-        StartCoroutine(spawnEnemyCoroutine());
-        StartCoroutine(spawnPowerUpCoroutine());
-    }
+    private bool _isAsteroidDestroyed = false;
 
     private IEnumerator spawnEnemyCoroutine()
     {
@@ -63,5 +58,19 @@ public class spawnManager : MonoBehaviour
     public void isPlayerDead()
     {
         _isPlayerDead = true;
+    }
+
+    public void isAsteroidDestroyed()
+    {
+        _isAsteroidDestroyed = true;
+        if (_isAsteroidDestroyed)
+        {
+            Invoke("startSpawning", 1f);
+        }
+    }
+    private void startSpawning()
+    {
+        StartCoroutine(spawnEnemyCoroutine());
+        StartCoroutine(spawnPowerUpCoroutine());
     }
 }

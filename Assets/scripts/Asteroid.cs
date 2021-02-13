@@ -10,14 +10,15 @@ public class Asteroid : MonoBehaviour
     [SerializeField] private GameObject _explosion;
     private GameObject _explosionHolder;
     private Vector3 _explosionPosition;
+    private spawnManager _spawnManager;
 
     void Start()
     {
-        // _animator = GetComponent<Animator>();
-        // if (_animator == null)
-        // {
-        //     Debug.LogError("asteroid class _animator does not exist");
-        // }
+        _spawnManager = GameObject.FindWithTag("spawn_manager").GetComponent<spawnManager>();
+        if (_spawnManager == null)
+        {
+            Debug.Log("Asteroid:: spawn manager handler does not exist");
+        }
     }
 
     // Update is called once per frame
@@ -29,12 +30,15 @@ public class Asteroid : MonoBehaviour
     {
         if (other.tag == "Laser")
         {
-            Debug.Log("I got hit by a laser");
             _explosionPosition = new Vector3(transform.position.x, transform.position.y, 0);
             _explosionHolder = Instantiate(_explosion, _explosionPosition, Quaternion.identity);
             Destroy(other.gameObject); //  destroy the laser 
-            Destroy(this.gameObject, 0.175f); // destroy the asteroid
             Destroy(_explosionHolder, 1.5f); // destroy the exploision
+            if (_spawnManager != null)
+            {
+                _spawnManager.isAsteroidDestroyed();
+            }
+            Destroy(this.gameObject, 0.175f); // destroy the asteroid
         }
     }
 }

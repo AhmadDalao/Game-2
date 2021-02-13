@@ -47,7 +47,6 @@ public class Enemy : MonoBehaviour
                 Destroy(this.gameObject, 0.25f);
                 _moveSpeed = 1f;
                 _player.playerTakeDamage();
-                //      _animator.ResetTrigger("onEnemyDeath");
             }
         }
         if (other.tag == "Laser")
@@ -63,7 +62,6 @@ public class Enemy : MonoBehaviour
             {
                 _player.updatePlayerScore(randomScore);
             }
-            //   _animator.ResetTrigger("onEnemyDeath");
             Destroy(other.gameObject);
         }
     }

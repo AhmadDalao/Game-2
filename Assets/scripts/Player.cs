@@ -21,7 +21,8 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActice = false;
     private bool _isSpeedUpActice = false;
     private bool _isShieldActice = false;
-    private int _score;
+    private int _score = 0;
+    private int _newLiveLimit = 100;
     private spawnManager _spawn;
     private UI_manager _UI_manager;
 
@@ -52,10 +53,26 @@ public class Player : MonoBehaviour
         }
     }
 
+
     public void updatePlayerScore(int points)
     {
         _score += points;
+        addNewLive();
         _UI_manager.updateScoreText(_score);
+    }
+
+    private void addNewLive()
+    {
+        if (_score >= _newLiveLimit && _numberOfLives != 3)
+        {
+            if (_numberOfLives < 3 && _numberOfLives > 0)
+            {
+                _numberOfLives++;
+                _UI_manager.updateLivesOnDamage(_numberOfLives);
+                Debug.Log("new live added you have " + _numberOfLives);
+                _score = 0;
+            }
+        }
     }
 
     public void playerTakeDamage()
@@ -66,9 +83,11 @@ public class Player : MonoBehaviour
             _isShieldActice = false;
             return;
         }
+        _score = 0;
+        _UI_manager.updateScoreText(_score);
         _numberOfLives--;
-        Debug.Log("lives remaning " + _numberOfLives);
 
+        Debug.Log("lives remaning " + _numberOfLives);
         _UI_manager.updateLivesOnDamage(_numberOfLives);
 
         if (_numberOfLives < 1)
