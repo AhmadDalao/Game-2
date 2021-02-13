@@ -14,10 +14,12 @@ public class gameManager : MonoBehaviour
             Invoke("reStartGame", delayInvoke);
         }
     }
+
     private void reStartGame()
     {
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
     }
+
     public void QuitGame()
     {
         Application.Quit();
