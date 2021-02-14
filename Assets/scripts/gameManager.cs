@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class gameManager : MonoBehaviour
 {
+    // this class is used with the quit and play again button
+    // which is displayed on the gameOverPanel once a placed is died
     private bool _hasGameEnded = false;
     private float _delayInvoke = 0f;
 

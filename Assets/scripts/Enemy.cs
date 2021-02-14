@@ -54,8 +54,8 @@ public class Enemy : MonoBehaviour
             {
                 _animator.SetTrigger("onEnemyDeath");
             }
-            Destroy(this.gameObject, 0.25f);
             _moveSpeed = 1f;
+            Destroy(this.gameObject, 0.25f);
             _player.playerTakeDamage();
         }
     }
@@ -67,8 +67,8 @@ public class Enemy : MonoBehaviour
         {
             _animator.SetTrigger("onEnemyDeath");
         }
-        Destroy(this.gameObject, 0.25f);
         _moveSpeed = 1f;
+        Destroy(this.gameObject, 0.25f);
         if (_player != null)
         {
             _player.updatePlayerScore(randomScore);
