@@ -72,7 +72,10 @@ public class Player : MonoBehaviour
             _isShieldActice = false;
             return;
         }
-        _score = 0;
+        if (_numberOfLives > 1)
+        {
+            _score = 0;
+        }
         _UI_manager.updateScoreText(_score);
         _numberOfLives--;
         addDamageToPlayer(_numberOfLives);
