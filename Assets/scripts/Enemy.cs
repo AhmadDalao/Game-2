@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     private float _moveSpeed = 4f;
     private Player _player;
     [SerializeField] private Animator _animator;
+    private AudioSource _explosionSoundOnEnemy;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,11 @@ public class Enemy : MonoBehaviour
         if (_animator == null)
         {
             Debug.LogError("animator is not found");
+        }
+        _explosionSoundOnEnemy = GetComponent<AudioSource>();
+        if (_explosionSoundOnEnemy == null)
+        {
+            Debug.LogError("_explosionSoundOnEnemy is null on enemy script");
         }
     }
 
@@ -38,10 +44,12 @@ public class Enemy : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            _explosionSoundOnEnemy.Play();
             didHitPlayer();
         }
         if (other.tag == "Laser")
         {
+            _explosionSoundOnEnemy.Play();
             didHitLaser(other);
         }
     }
@@ -55,8 +63,8 @@ public class Enemy : MonoBehaviour
                 _animator.SetTrigger("onEnemyDeath");
             }
             _moveSpeed = 1f;
-            Destroy(this.gameObject, 0.25f);
             _player.playerTakeDamage();
+            Destroy(this.gameObject, 1f);
         }
     }
 
@@ -68,11 +76,11 @@ public class Enemy : MonoBehaviour
             _animator.SetTrigger("onEnemyDeath");
         }
         _moveSpeed = 1f;
-        Destroy(this.gameObject, 0.25f);
         if (_player != null)
         {
             _player.updatePlayerScore(randomScore);
         }
+        Destroy(this.gameObject, 1f);
         Destroy(other.gameObject);
     }
 

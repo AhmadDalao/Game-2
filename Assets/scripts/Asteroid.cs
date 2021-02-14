@@ -6,7 +6,6 @@ public class Asteroid : MonoBehaviour
 {
     // Start is called before the first frame update
     private float _tiltAroundZ = 45f;
-    // [SerializeField] private Animator _animator;
     [SerializeField] private GameObject _explosion;
     private GameObject _explosionHolder;
     private Vector3 _explosionPosition;

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class power_up : MonoBehaviour
 {
-    [SerializeField] int powerUpID;
+    [SerializeField] private int _powerUpID;
+    private AudioSource _power_up_sound;
     private float _moveSpeed = 5f;
     Player _player;
 
@@ -15,6 +16,11 @@ public class power_up : MonoBehaviour
         if (_player == null)
         {
             Debug.LogError("There is an error");
+        }
+        _power_up_sound = GameObject.FindWithTag("power_up_sound").GetComponent<AudioSource>();
+        if (_power_up_sound == null)
+        {
+            Debug.LogError("_power_up_sound is null from power_up scripts");
         }
     }
 
@@ -35,25 +41,27 @@ public class power_up : MonoBehaviour
         {
             if (_player != null)
             {
-                switch (powerUpID)
+                switch (_powerUpID)
                 {
                     case 0:
                         _player.tripleShotPowerUp(5f);
-                        Destroy(this.gameObject);
                         break;
                     case 1:
                         _player.moveSpeedPowerUp(3f);
-                        Destroy(this.gameObject);
                         break;
                     case 2:
                         _player.shieldPowerUp();
-                        Destroy(this.gameObject);
                         break;
                     default:
                         Debug.Log("you don't have any power up");
                         break;
                 }
+                if (_power_up_sound != null)
+                {
+                    _power_up_sound.Play();
+                }
             }
+            Destroy(this.gameObject);
         }
     }
 }

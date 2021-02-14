@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _right_player_damage;
     [SerializeField] private GameObject _left_player_damage;
     [SerializeField] private GameObject _explosion;
+    [SerializeField] private AudioClip _audioClip;
+    private AudioSource _audioSource;
     private GameObject _clonedLaser;
     private GameObject _clonedExplosion;
     private Vector3 _explosionPosition;
@@ -44,6 +46,15 @@ public class Player : MonoBehaviour
         if (_UI_manager == null)
         {
             Debug.LogError("ui manager not found");
+        }
+        _audioSource = gameObject.GetComponent<AudioSource>();
+        if (_audioSource == null)
+        {
+            Debug.LogError("there is an error");
+        }
+        else
+        {
+            _audioSource.clip = _audioClip;
         }
     }
 
@@ -178,6 +189,10 @@ public class Player : MonoBehaviour
             _clonedLaserPosition = new Vector3(transform.position.x, transform.position.y + _offset, 0);
             _clonedLaser = Instantiate(_laserPrefab, _clonedLaserPosition, Quaternion.identity);
             _clonedLaser.transform.SetParent(_laserContainer.transform);
+        }
+        if (_audioSource != null)
+        {
+            _audioSource.Play();
         }
     }
 
