@@ -64,6 +64,7 @@ public class Enemy : MonoBehaviour
             }
             _moveSpeed = 1f;
             _player.playerTakeDamage();
+            Destroy(this.GetComponent<Collider2D>());
             Destroy(this.gameObject, 1f);
         }
     }
@@ -81,6 +82,7 @@ public class Enemy : MonoBehaviour
             _player.updatePlayerScore(randomScore);
         }
         Destroy(this.gameObject, 1f);
+        Destroy(this.GetComponent<Collider2D>());
         Destroy(other.gameObject);
     }
 
