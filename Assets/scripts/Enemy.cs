@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private float _moveSpeed = 4f;
+    private float _moveSpeed = 2.5f;
     private Player _player;
     [SerializeField] private Animator _animator;
     private AudioSource _explosionSoundOnEnemy;
+    [SerializeField] private GameObject _enemyLaserPrefab;
+    private GameObject _laserContainer;
+    private GameObject _clonedLaser;
+    private float _lastShot = -1f;
+    private float _shotingRate = 3.0f;
+    private float _offset = 1f;
 
-    // Start is called before the first frame update
     void Start()
     {
         _player = GameObject.FindWithTag("Player").GetComponent<Player>();
@@ -17,20 +22,33 @@ public class Enemy : MonoBehaviour
         {
             Debug.LogError("player is not found");
         }
+
         _animator = GetComponent<Animator>();
         if (_animator == null)
         {
             Debug.LogError("animator is not found");
         }
+
         _explosionSoundOnEnemy = GetComponent<AudioSource>();
         if (_explosionSoundOnEnemy == null)
         {
             Debug.LogError("_explosionSoundOnEnemy is null on enemy script");
         }
+
+        _laserContainer = GameObject.FindWithTag("LaserContainer");
+        if (_laserContainer == null)
+        {
+            Debug.LogError("_laserContainer is null on enemy script");
+        }
     }
 
-    // Update is called once per frame
     void Update()
+    {
+        enemyMovement();
+        enemyFire();
+    }
+
+    private void enemyMovement()
     {
         transform.Translate(Vector3.down * _moveSpeed * Time.deltaTime);
         float min_y = -8f;
@@ -81,9 +99,25 @@ public class Enemy : MonoBehaviour
         {
             _player.updatePlayerScore(randomScore);
         }
-        Destroy(this.gameObject, 1f);
         Destroy(this.GetComponent<Collider2D>());
+        Destroy(this.gameObject, 1f);
         Destroy(other.gameObject);
+    }
+
+    private void enemyFire()
+    {
+        if (Time.time > _lastShot)
+        {
+            _lastShot = Time.time + _shotingRate;
+            Vector3 laserPosition = new Vector3(transform.position.x, transform.position.y - _offset, 0);
+            _clonedLaser = Instantiate(_enemyLaserPrefab, laserPosition, Quaternion.identity);
+            //   _clonedLaser.transform.SetParent(_laserContainer.transform);
+            Laser[] lasers = _clonedLaser.GetComponentsInChildren<Laser>();
+            foreach (var laser in lasers)
+            {
+                laser.isEnemyLaserFired();
+            }
+        }
     }
 
 }

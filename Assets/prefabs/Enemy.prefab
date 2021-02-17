@@ -147,6 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 6679754276225333503}
+  _enemyLaserPrefab: {fileID: 4378112239212896756, guid: 2eb54281b4c587342ba8ab2ec6f7fc7a, type: 3}
 --- !u!95 &6679754276225333503
 Animator:
   serializedVersion: 3

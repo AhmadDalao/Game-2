@@ -16,6 +16,7 @@ TagManager:
   - left_player_damage
   - audio_manager
   - power_up_sound
+  - EnemyLaser
   layers:
   - Default
   - TransparentFX
